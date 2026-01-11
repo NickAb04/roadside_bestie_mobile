@@ -1,11 +1,14 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+
 class ApiService {
   // REPLACE THIS IP with your Backend Teammate's IPv4 Address
   // If testing on Emulator: 'http://10.0.2.2:8000/api'
   // If testing on Real Phone: 'http://192.168.1.XX:8000/api'
-  static const String baseUrl = 'http://192.168.0.105:8000/api'; 
+  static const String baseUrl = 'http://192.168.0.16:8000/api'; 
 
   final Dio _dio = Dio(BaseOptions(baseUrl: baseUrl));
   final _storage = const FlutterSecureStorage();
@@ -41,5 +44,36 @@ class ApiService {
   // Mechanic: Get Status
   Future<Response> getJobStatus(int jobId) async {
     return await _dio.get('/sos/$jobId/status');
+  }
+
+  static Future<Map<String, dynamic>> sendSOS(int userId, double lat, double long, String notes) async {
+    try {
+      print("🚀 Sending SOS to: $baseUrl/sos"); // Debug print
+      
+      final response = await http.post(
+        Uri.parse('$baseUrl/sos'),
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json",
+        },
+        body: jsonEncode({
+          "user_id": userId,
+          "latitude": lat,
+          "longitude": long,
+          "notes": notes,
+        }),
+      );
+
+      print("Response Code: ${response.statusCode}"); // Debug print
+      print("Response Body: ${response.body}"); // Debug print
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        return jsonDecode(response.body);
+      } else {
+        throw Exception('Server Error: ${response.body}');
+      }
+    } catch (e) {
+      throw Exception('Connection Error: $e');
+    }
   }
 }
