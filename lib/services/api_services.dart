@@ -29,4 +29,20 @@ class ApiService {
       'password': password
     });
   }
+
+  // YOUR METHODS (Mechanic)
+  // Accept Job
+  Future<Response> acceptJob(int jobId) async {
+    return await _dio.post('/sos/$jobId/accept');
+  }
+
+  // Complete Job
+  Future<Response> completeJob(int jobId) async {
+    return await _dio.post('/sos/$jobId/complete');
+  }
+
+  // Get Job Status (For polling)
+  Future<Response> getJobStatus(int jobId) async {
+    return await _dio.get('/sos/$jobId/status');
+  }
 }
