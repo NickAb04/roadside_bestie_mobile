@@ -1,4 +1,4 @@
-# roadside_bestie_mobile
+# roadside_bestie
 
 A new Flutter project.
 
