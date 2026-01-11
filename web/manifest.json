@@ -1,6 +1,6 @@
 {
-    "name": "roadside_bestie_mobile",
-    "short_name": "roadside_bestie_mobile",
+    "name": "roadside_bestie",
+    "short_name": "roadside_bestie",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
