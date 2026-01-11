@@ -2,46 +2,43 @@ import 'package:dio/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class ApiService {
-  // REPLACE WITH YOUR LARAVEL IP ADDRESS (Keep the port 8000)
-  static const String baseUrl = 'http://192.168.0.17:8000/api'; 
-  
+  // REPLACE THIS IP with your Backend Teammate's IPv4 Address
+  // If testing on Emulator: 'http://10.0.2.2:8000/api'
+  // If testing on Real Phone: 'http://192.168.1.XX:8000/api'
+  static const String baseUrl = 'http://192.168.0.105:8000/api'; 
+
   final Dio _dio = Dio(BaseOptions(baseUrl: baseUrl));
-  final _storage = FlutterSecureStorage();
+  final _storage = const FlutterSecureStorage();
 
   ApiService() {
-    // This adds the token to every request automatically
     _dio.interceptors.add(InterceptorsWrapper(
       onRequest: (options, handler) async {
         final token = await _storage.read(key: 'auth_token');
         if (token != null) {
-          options.headers['Authorization'] = 'Bearer $token'; // 
+          options.headers['Authorization'] = 'Bearer $token';
         }
-        options.headers['Accept'] = 'application/json'; // [cite: 408]
+        options.headers['Accept'] = 'application/json';
         return handler.next(options);
       },
     ));
   }
 
-  // Example method for Daniel to use
+  // Login Method
   Future<Response> login(String email, String password) async {
-    return await _dio.post('/login', data: {
-      'email': email, 
-      'password': password
-    });
+    return await _dio.post('/login', data: {'email': email, 'password': password});
   }
 
-  // YOUR METHODS (Mechanic)
-  // Accept Job
+  // Mechanic: Accept Job
   Future<Response> acceptJob(int jobId) async {
     return await _dio.post('/sos/$jobId/accept');
   }
 
-  // Complete Job
+  // Mechanic: Complete Job
   Future<Response> completeJob(int jobId) async {
     return await _dio.post('/sos/$jobId/complete');
   }
 
-  // Get Job Status (For polling)
+  // Mechanic: Get Status
   Future<Response> getJobStatus(int jobId) async {
     return await _dio.get('/sos/$jobId/status');
   }
