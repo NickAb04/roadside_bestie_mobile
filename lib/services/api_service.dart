@@ -7,8 +7,8 @@ import 'package:http/http.dart' as http;
 class ApiService {
   // REPLACE THIS IP with your Backend Teammate's IPv4 Address
   // If testing on Emulator: 'http://10.0.2.2:8000/api'
-  // If testing on Real Phone: 'http://192.168.1.XX:8000/api'
-  static const String baseUrl = 'http://192.168.0.16:8000/api'; 
+  // If testing on Real Phone: 'http://10.79.3.29:8000/api'
+  static const String baseUrl = 'http://10.79.3.29:8000/api'; 
 
   final Dio _dio = Dio(BaseOptions(baseUrl: baseUrl));
   final _storage = const FlutterSecureStorage();

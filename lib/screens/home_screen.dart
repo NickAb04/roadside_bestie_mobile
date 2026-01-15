@@ -3,13 +3,15 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
+import '../features/auth/providers/auth_provider.dart';
 
 // =========================================================
 // 1. API SERVICE ( The Bridge )
 // =========================================================
 class ApiService {
   // Use 10.0.2.2 for Android Emulator connecting to Laragon
-  static const String baseUrl = "http://192.168.0.16:8000/api"; 
+  static const String baseUrl = "http://10.79.3.29:8000/api";  
 
   // --- EXISTING: Send SOS ---
   static Future<Map<String, dynamic>> sendSOS(int userId, double lat, double long, String notes) async {
@@ -296,6 +298,17 @@ class _HomeScreenState extends State<HomeScreen> {
               onTap: () {
                 Navigator.pop(context);
                 _checkStatus();
+              },
+            ),
+            const Divider(),
+            ListTile(
+              leading: Icon(Icons.logout, color: Colors.red),
+              title: Text("Logout", style: TextStyle(color: Colors.red)),
+              onTap: () async {
+                 await context.read<AuthProvider>().logout();
+                 if (context.mounted) {
+                   Navigator.of(context).pushNamedAndRemoveUntil('/login', (route) => false);
+                 }
               },
             ),
           ],
